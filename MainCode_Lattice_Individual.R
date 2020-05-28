@@ -26,12 +26,12 @@ boxplot(area_mm2~Rep+Location,data=datos,las=2)
 
 envirs <- levels(datos$Location)
 envirs
-print(envirs)
 
 MEANSALL <- NULL
 
-statis <- data.frame(matrix(NA,nrow=8,ncol=length(envirs)))
-rownames(statis) <- c("Location","n Reps","Error Var","Genotypic Var","Heritability","Grand Mean","LSD","CV")
+statis <- data.frame(matrix(NA,nrow=7,ncol=length(envirs)))
+rownames(statis) <- c("n Reps","Error Var","Genotypic Var","Heritability","Grand Mean","LSD","CV")
+names(statis) <- c(envirs)
 
 for(i in 1:length(envirs)){
   envir <- envirs[i]
@@ -79,7 +79,17 @@ for(i in 1:length(envirs)){
   h2 <- varG/(varG + varErr/nRep)
   
   
-  statis[,i] <- c(envir,nRep,varErr,varG,h2,media,LSD,CV)
+  statis[,i] <- c(nRep,varErr,varG,h2,media,LSD,CV)
   
   MEANSALL <- rbind(MEANSALL, results)
+  
+
+
 }
+
+##add writing files
+write.table(MEANSALL, file = "Output\\BLUEs & BLUPs Individual Analysis Lattice.csv", sep = ",", 
+            row.names = FALSE,  qmethod = "double")
+
+write.table(statis, file = "Output\\Statistics Individual Analysis Lattice.csv", sep = ",", 
+            col.names = NA, qmethod = "double")
